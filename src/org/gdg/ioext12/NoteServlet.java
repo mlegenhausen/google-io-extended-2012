@@ -16,10 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
+
 
 public class NoteServlet extends HttpServlet {
 
@@ -28,7 +29,15 @@ public class NoteServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 7845565559852964098L;
 	private static final Logger logger = Logger.getLogger(NoteServlet.class.getName());
+	private static Gson gson = new Gson();
 	
+	
+	private class AuthError {
+		private String url;
+		public AuthError(String url){
+			this.url = url;
+		}
+	}
 	/*
 	 * Delete note
 	 * @see javax.servlet.http.HttpServlet#doDelete(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -37,6 +46,7 @@ public class NoteServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		logger.info("doDelete");
 		// TODO Auto-generated method stub
 		super.doDelete(req, resp);
 	}
@@ -49,12 +59,15 @@ public class NoteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		logger.info("doGet");
 		final UserService userService = UserServiceFactory.getUserService();
 		final User user = userService.getCurrentUser();
 		
 		if(user== null){
 			resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			resp.getWriter().append(("{url:"+req.getRequestURI()+"}"));
+			//resp.getWriter().append(("{url:"+req.getRequestURI()+"}"));
+			AuthError error = new AuthError(req.getRequestURI());
+			resp.getWriter().append(gson.toJson(error));
 		}else{
 			final NoteDAO dao = new NoteDB();
 			final List<Note> notes = dao.findByUser(user.getEmail()); 
@@ -92,6 +105,7 @@ public class NoteServlet extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		logger.info("doPut");
 		final String content = req.getParameter("content");
 		String id = req.getRequestURI();
 		logger.info("doPut");
@@ -125,6 +139,7 @@ public class NoteServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		logger.info("doPost");
 		final String content = req.getParameter("content");
 		final UserService userService = UserServiceFactory.getUserService();
 		final User user = userService.getCurrentUser();

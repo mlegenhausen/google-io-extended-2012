@@ -13,15 +13,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/notes</url-pattern>
 	</servlet-mapping>
 	
-<!-- 	<servlet>
-	    <servlet-name>DeleteNoteServlet</servlet-name>
-	    <servlet-class>org.gdg.ioext12.DeleteNoteServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-	   	<servlet-name>DeleteNoteServlet</servlet-name>
-	    <url-pattern>/note/delete/*</url-pattern>
-	</servlet-mapping>
-	 -->
 	<servlet>
 		<servlet-name>NoteServlet</servlet-name>
 		<servlet-class>org.gdg.ioext12.NoteServlet</servlet-class>
