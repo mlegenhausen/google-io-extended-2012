@@ -1,3 +1,4 @@
 .metadata/
 war/WEB-INF/classes/
 .settings/
+war/WEB-INF/classes/
