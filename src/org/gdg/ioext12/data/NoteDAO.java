@@ -10,4 +10,6 @@ public interface NoteDAO {
 	
 	void close();
 	
+	void delet(Note note);
+	
 }

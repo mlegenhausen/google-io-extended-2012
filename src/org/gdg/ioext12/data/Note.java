@@ -67,6 +67,4 @@ public final class Note {
 	public void setKey(Key key) {
 		this.key = key;
 	}
-	
-	
 }

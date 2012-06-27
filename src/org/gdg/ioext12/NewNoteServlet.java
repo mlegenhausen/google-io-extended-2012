@@ -19,11 +19,6 @@ public final class NewNoteServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5573022822791703442L;
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		resp.sendRedirect("/newnote.html");
-	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -31,10 +26,10 @@ public final class NewNoteServlet extends HttpServlet {
 		final String content = req.getParameter("note");
 		final UserService userService = UserServiceFactory.getUserService();
 		final User user = userService.getCurrentUser();
-		if(user== null){
+		if (user == null) {
 			resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
-		}else{
-			if(content != null){
+		} else {
+			if (content != null) {
 				final NoteDAO dao = new NoteDB();
 				final Note note = new Note();
 				note.setContent(content);
@@ -43,6 +38,6 @@ public final class NewNoteServlet extends HttpServlet {
 				dao.close();
 			}
 		}
-		resp.sendRedirect("/notes.html");
+		//resp.sendRedirect("/notes.html");
 	}
 }
