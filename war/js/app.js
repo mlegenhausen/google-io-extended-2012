@@ -2,7 +2,19 @@
 	'use strict';
 	
 	_.extend(Backbone.View.prototype, {
-		destroy: function() {}
+		alertTemplate: Handlebars.compile($('#alert-template').html()),
+		alertTypes: {
+			error: 'Fehler',
+			success: 'Erfolg'
+		},
+		destroy: function() {},
+		alert: function(type, msg) {
+			this.$('.alert-container').html(this.alertTemplate({
+				type: type,
+				label: this.alertTypes[type],
+				text: msg
+			}));
+		}
 	});
 	
 	var NotesModel = Backbone.Collection.extend({
@@ -42,7 +54,9 @@
 		},
 		saveError: function(model, resp) {
 			if (resp.status === 401) {
-				console.log('unauthorized')
+				window.location.href = model.get('url');
+			} else {
+				this.alert('error', 'Notiz konnte nicht hinzugefügt werden.');
 			}
 		},
 		cancel: function() {
