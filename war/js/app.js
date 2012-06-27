@@ -93,6 +93,8 @@
 			this.model = new NotesModel();
 			var source = $("#notes-template").html();
 			this.template = Handlebars.compile(source);
+			this.model.on('change', this.renderEntries, this);
+			this.model.fetch();
 		},
 		render: function() {
 			var model = this.model.toJSON();
@@ -100,6 +102,7 @@
 			this.renderEntries();
 		},
 		renderEntries: function() {
+			this.$('table > tbody').empty();
 			this.model.each(this.renderEntry, this);
 		},
 		renderEntry: function(model) {
