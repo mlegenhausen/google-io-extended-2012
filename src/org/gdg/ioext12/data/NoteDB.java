@@ -9,7 +9,7 @@ import javax.jdo.Query;
 
 import org.gdg.ioext12.util.PMF;
 
-import com.google.appengine.api.datastore.Key;
+
 
 public final class NoteDB implements NoteDAO{
 
