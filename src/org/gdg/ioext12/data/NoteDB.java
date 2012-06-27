@@ -9,6 +9,8 @@ import javax.jdo.Query;
 
 import org.gdg.ioext12.util.PMF;
 
+import com.google.appengine.api.datastore.Key;
+
 public final class NoteDB implements NoteDAO{
 
 	/**
@@ -47,5 +49,10 @@ public final class NoteDB implements NoteDAO{
 	@Override
 	public void close() {
 		this.pManager.close();
+	}
+
+	@Override
+	public void delet(final Note note) {
+		this.pManager.deletePersistent(note);
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ public final class NotesServlet extends HttpServlet {
      */
     private static final Logger logger = Logger.getLogger(NotesServlet.class.getName());
 	
+	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
@@ -51,6 +53,27 @@ public final class NotesServlet extends HttpServlet {
 			resp.setCharacterEncoding("UTF-8");
 			resp.getWriter().append(result);
 		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		final String content = req.getParameter("note");
+		final UserService userService = UserServiceFactory.getUserService();
+		final User user = userService.getCurrentUser();
+		if(user== null){
+			resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
+		}else{
+			if(content != null){
+				final NoteDAO dao = new NoteDB();
+				final Note note = new Note();
+				note.setContent(content);
+				note.setUser(user.getEmail());
+				dao.persist(note);
+				dao.close();
+			}
+		}
+		//resp.sendRedirect("/notes.html");
 	}
 	
 	
