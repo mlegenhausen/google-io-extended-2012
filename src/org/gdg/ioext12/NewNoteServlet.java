@@ -7,37 +7,37 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.gdg.ioext12.data.Note;
+import org.gdg.ioext12.data.NoteDAO;
+import org.gdg.ioext12.data.NoteDB;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-public class DeleteNoteServlet extends HttpServlet{
+public final class NewNoteServlet extends HttpServlet {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1851946003715511015L;
+	private static final long serialVersionUID = 5573022822791703442L;
+
 
 	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		final String id = req.getRequestURI();
+		final String content = req.getParameter("note");
 		final UserService userService = UserServiceFactory.getUserService();
 		final User user = userService.getCurrentUser();
-		if (user == null){
+		if (user == null) {
 			resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
 		} else {
-			if (id != null){
-				//final NodeDAO dao = 
+			if (content != null) {
+				final NoteDAO dao = new NoteDB();
+				final Note note = new Note();
+				note.setContent(content);
+				note.setUser(user.getEmail());
+				dao.persist(note);
+				dao.close();
 			}
 		}
-		
-		
+		//resp.sendRedirect("/notes.html");
 	}
-
-
-	
-	
-	
-
 }
